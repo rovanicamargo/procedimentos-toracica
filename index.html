@@ -374,7 +374,10 @@ async function salvarProcedimento(){
     toast('Preencha todos os campos obrigatórios (*)','err');return;
   }
   const lat=getVal('f-lateralidade');
-  const reg={id:editingId||Date.now(),data,hospital:hosp,prontuario:pront,convenio:conv,cirurgiao:cir,local,lateralidade:lat,acessos:[...selectedAcessos],procedimentos:procs};
+  // Converter data para formato brasileiro
+  const partes=data.split('-');
+  const dataBR=partes.length===3?partes[2]+'/'+partes[1]+'/'+partes[0]:data;
+  const reg={id:editingId||Date.now(),data:dataBR,hospital:hosp,prontuario:pront,convenio:conv,cirurgiao:cir,local,lateralidade:lat,acessos:[...selectedAcessos],procedimentos:procs};
   if(editingId){const idx=db.findIndex(r=>r.id===editingId);if(idx>=0)db[idx]=reg;toast('Procedimento atualizado');}
   else{db.unshift(reg);toast('Procedimento salvo');}
   saveDB();
