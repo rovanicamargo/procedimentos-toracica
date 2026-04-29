@@ -195,7 +195,14 @@ tbody tr:hover{background:#f0f7fb}
           <option>Não se aplica</option>
         </select>
       </div>
-      <div class="form-group"></div>
+      <div class="form-group"><label>Caráter da cirurgia *</label>
+        <select id="f-carater">
+          <option value="">Selecione...</option>
+          <option>Eletivo</option>
+          <option>Emergência</option>
+          <option>Urgência</option>
+        </select>
+      </div>
     </div>
 
     <div class="form-group" style="margin-bottom:14px">
@@ -238,7 +245,7 @@ tbody tr:hover{background:#f0f7fb}
       <table>
         <thead><tr>
           <th>Data</th><th>Hospital</th><th>Prontuário</th><th>Convênio</th>
-          <th>Cirurgião</th><th>Local</th><th>Lateralidade</th><th>Acesso</th><th>Procedimento(s)</th><th>Ações</th>
+          <th>Cirurgião</th><th>Local</th><th>Caráter</th><th>Lateralidade</th><th>Acesso</th><th>Procedimento(s)</th><th>Ações</th>
         </tr></thead>
         <tbody id="tabela-body"></tbody>
       </table>
@@ -270,7 +277,7 @@ tbody tr:hover{background:#f0f7fb}
 // =====================================================
 //  CONFIGURAÇÃO — substitua pela URL do Apps Script
 // =====================================================
-const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbx4p6aoLkbnNP44PhfKv9MgMm2aizOHQpusfKhQaLluqRKPRPWMtJQwc2cV_BVWHkLJ/exec';
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz3C3nF8vrBNr07TjozIL46s3rkguvkLm7YWy9kphuXjIHPnHb2Ya8YyUGcXzK0OeoV/exec';
 // =====================================================
 
 const STORAGE_KEY = 'torax_db_v3';
@@ -283,6 +290,7 @@ const PROCEDIMENTOS = [
   'Herniorrafia diafragmática','Linfadenectomia mediastinal',
   'Lobectomia','Mediastinoscopia','Pleurectomia',
   'Pleurodese','Pleurostomia','Pneumonectomia','Pneumorrafia',
+  'Reconstrução da parede torácica',
   'Remoção de coágulos','Ressecção de mediastino',
   'Ressecção em cunha (wedge)','Retirada de corpo estranho endobrônquico',
   'Segmentectomia','Simpatectomia','Timectomia',
@@ -418,9 +426,7 @@ async function salvarProcedimento(){
   let local=getVal('f-local');if(local==='Outro')local=getVal('f-local-outro')||'Outro';
   const outro=getVal('f-proc-outro');
   const procs=[...selectedProcs];if(outro)procs.push(outro);
-  if(!data||!hosp||!pront||!cir||!conv||!local||procs.length===0||selectedAcessos.length===0){
-    toast('Preencha todos os campos obrigatórios (*)','err');return;
-  }
+
   const lat=getVal('f-lateralidade');
   // Converter data para formato brasileiro
   const partes=data.split('-');
@@ -437,7 +443,7 @@ function cancelEdit(){
   editingId=null;
   document.getElementById('form-title').textContent='Novo procedimento';
   ['f-data','f-hospital','f-prontuario','f-convenio','f-convenio-outro','f-cirurgiao',
-   'f-cirurgiao-outro','f-local','f-local-outro','f-lateralidade','f-proc-outro','proc-search']
+   'f-cirurgiao-outro','f-local','f-local-outro','f-lateralidade','f-carater','f-proc-outro','proc-search']
    .forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('f-data').value=new Date().toISOString().slice(0,10);
   selectedAcessos=[];renderAcessoTags();renderAcessoList();
@@ -456,6 +462,7 @@ function editarReg(id){
   setSelect('f-cirurgiao',r.cirurgiao,'f-cirurgiao-outro');
   setSelect('f-local',r.local,'f-local-outro');
   document.getElementById('f-lateralidade').value=r.lateralidade||'';
+  document.getElementById('f-carater').value=r.carater||'';
   selectedAcessos=r.acessos||(r.acesso?[r.acesso]:[]);
   renderAcessoTags();renderAcessoList();
   const kp=(r.procedimentos||[r.procedimento]).filter(p=>PROCEDIMENTOS.includes(p));
@@ -548,11 +555,11 @@ function renderBarChart(id,data,color){
 
 function exportarCSV(){
   if(!db.length){toast('Nenhum dado para exportar','err');return;}
-  const header='Data;Hospital;Prontuário;Convênio;Cirurgião;Local;Lateralidade;Acesso;Procedimentos';
+  const header='Data;Hospital;Prontuário;Convênio;Cirurgião;Local;Caráter;Lateralidade;Acesso;Procedimentos';
   const rows=db.map(r=>{
     const acessos=(r.acessos||(r.acesso?[r.acesso]:[])).join(' | ');
     const procs=(r.procedimentos||[r.procedimento]||[]).join(' | ');
-    return['data','hospital','prontuario','convenio','cirurgiao','local','lateralidade'].map(c=>`"${(r[c]||'').replace(/"/g,'""')}"`).join(';')+`;"${acessos}";"${procs}"`;
+    return['data','hospital','prontuario','convenio','cirurgiao','local','carater','lateralidade'].map(c=>`"${(r[c]||'').replace(/"/g,'""')}"`).join(';')+`;"${acessos}";"${procs}"`;
   });
   const csv='\uFEFF'+[header,...rows].join('\n');
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
