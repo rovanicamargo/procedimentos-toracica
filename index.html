@@ -94,6 +94,7 @@ tbody tr:hover{background:#f0f7fb}
       <h1 style="margin-bottom:2px">Controle de Procedimentos</h1>
       <p class="subtitle" style="margin-bottom:0">Centro de Cirurgia Torácica do Oeste Catarinense</p>
     </div>
+    <span id="pending-badge" style="display:none;background:#e67e22;color:#fff;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:bold;cursor:pointer;white-space:nowrap" onclick="sincronizarPendentes()"></span>
   </div>
 
   <div class="tabs">
@@ -303,32 +304,79 @@ function toast(msg,tipo){
   setTimeout(()=>el.classList.remove('show'),3000);
 }
 
+const PENDING_KEY='torax_pending_v1';
+let pendingQueue=[];
+let syncInProgress=false;
+
+function loadPending(){try{const r=localStorage.getItem(PENDING_KEY);if(r)pendingQueue=JSON.parse(r);}catch(e){pendingQueue=[];}}
+function savePending(){try{localStorage.setItem(PENDING_KEY,JSON.stringify(pendingQueue));}catch(e){}}
+
+function updateSyncBadge(){
+  const badge=document.getElementById('pending-badge');
+  if(!badge)return;
+  if(pendingQueue.length>0){
+    badge.textContent=`⏳ ${pendingQueue.length} pendente${pendingQueue.length>1?'s':''}`;
+    badge.style.display='inline-block';
+  } else {
+    badge.style.display='none';
+  }
+}
+
 async function enviarParaSheets(reg){
   if(!SHEETS_URL||SHEETS_URL==='COLE_AQUI_A_URL_DO_APPS_SCRIPT') return;
   const status=document.getElementById('sync-status');
   status.textContent='Enviando para planilha...';
   status.className='sync-status';
+  const payload={
+    data: reg.data,
+    hospital: reg.hospital,
+    prontuario: reg.prontuario,
+    convenio: reg.convenio,
+    cirurgiao: reg.cirurgiao,
+    local: reg.local,
+    lateralidade: reg.lateralidade||'',
+    acessos: (reg.acessos||[]).join(' | '),
+    procedimentos: (reg.procedimentos||[]).join(' | ')
+  };
   try{
-    const payload={
-      data: reg.data,
-      hospital: reg.hospital,
-      prontuario: reg.prontuario,
-      convenio: reg.convenio,
-      cirurgiao: reg.cirurgiao,
-      local: reg.local,
-      lateralidade: reg.lateralidade||'',
-      acessos: (reg.acessos||[]).join(' | '),
-      procedimentos: (reg.procedimentos||[]).join(' | ')
-    };
     await fetch(SHEETS_URL,{method:'POST',body:JSON.stringify(payload)});
     status.textContent='✓ Salvo na planilha';
     status.className='sync-status sync-ok';
   }catch(e){
-    status.textContent='⚠ Salvo localmente (sem conexão)';
+    // Sem conexão — adiciona à fila de pendentes
+    pendingQueue.push({...payload, _id: reg.id, _ts: Date.now()});
+    savePending();
+    updateSyncBadge();
+    status.textContent='⏳ Sem conexão — será enviado automaticamente';
     status.className='sync-status sync-err';
   }
   setTimeout(()=>{status.textContent='';},5000);
 }
+
+async function sincronizarPendentes(){
+  if(!SHEETS_URL||SHEETS_URL==='COLE_AQUI_A_URL_DO_APPS_SCRIPT') return;
+  if(syncInProgress||pendingQueue.length===0) return;
+  if(!navigator.onLine) return;
+  syncInProgress=true;
+  const fila=[...pendingQueue];
+  let enviados=0;
+  for(const payload of fila){
+    try{
+      await fetch(SHEETS_URL,{method:'POST',body:JSON.stringify(payload)});
+      pendingQueue=pendingQueue.filter(p=>p._id!==payload._id);
+      savePending();
+      enviados++;
+    }catch(e){break;}
+  }
+  syncInProgress=false;
+  updateSyncBadge();
+  if(enviados>0) toast(`✓ ${enviados} registro${enviados>1?'s':''} sincronizado${enviados>1?'s':''} com a planilha`);
+}
+
+// Monitora retorno de conexão
+window.addEventListener('online', ()=>{ setTimeout(sincronizarPendentes, 2000); });
+// Tenta sincronizar a cada 60 segundos
+setInterval(sincronizarPendentes, 60000);
 
 function renderAcessoList(){
   document.getElementById('acesso-list').innerHTML=ACESSOS.map(a=>`
@@ -525,9 +573,13 @@ function limparDadosTeste(){
 }
 
 loadDB();
+loadPending();
 document.getElementById('f-data').value=new Date().toISOString().slice(0,10);
 renderAcessoList();
 renderProcList();
+updateSyncBadge();
+// Tenta sincronizar pendentes ao carregar se houver conexão
+setTimeout(sincronizarPendentes, 3000);
 </script>
 </body>
 </html>
