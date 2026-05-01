@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCTO — Guia Rápido</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#222;padding:20px}
+.container{max-width:720px;margin:0 auto;padding-bottom:60px}
+.header{text-align:center;margin-bottom:32px;padding:24px;background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.header h1{font-size:20px;color:#1a5276;margin-bottom:4px}
+.header p{font-size:13px;color:#888}
+.link-box{background:#eaf3fb;border:1px solid #aed6f1;border-radius:8px;padding:14px 18px;margin-bottom:28px;text-align:center}
+.link-box p{font-size:12px;color:#666;margin-bottom:6px}
+.link-box a{font-size:15px;font-weight:bold;color:#1a5276;word-break:break-all}
+.section{background:#fff;border-radius:12px;padding:22px 24px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,0.07)}
+.section-title{font-size:15px;font-weight:bold;color:#1a5276;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}
+.step:last-child{margin-bottom:0}
+.step-num{background:#1a5276;color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;flex-shrink:0;margin-top:1px}
+.step-text{font-size:14px;line-height:1.6;color:#444}
+.step-text strong{color:#222}
+.tip{background:#fef9e7;border-left:3px solid #f1c40f;padding:10px 14px;border-radius:4px;font-size:13px;color:#7d6608;margin-top:12px}
+.ok{background:#eafaf1;border-left:3px solid #27ae60;padding:10px 14px;border-radius:4px;font-size:13px;color:#1e8449;margin-top:12px}
+.device-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.device-card{border:1px solid #e0e0e0;border-radius:10px;padding:16px}
+.device-title{font-size:13px;font-weight:bold;color:#1a5276;margin-bottom:12px;text-align:center}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.field{background:#f0f7fb;border-radius:6px;padding:8px 10px;font-size:12px;color:#1a5276;font-weight:bold;text-align:center}
+.field.required::after{content:" *";color:#c0392b}
+.warn{background:#fdf2f8;border-left:3px solid #c0392b;padding:10px 14px;border-radius:4px;font-size:13px;color:#922b21;margin-top:12px}
+@media(max-width:500px){
+  .device-grid{grid-template-columns:1fr}
+  .fields{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>🫁 CCTO — Registro de Procedimentos</h1>
+    <p>Guia rápido para residentes</p>
+  </div>
+
+  <!-- LINK -->
+  <div class="link-box">
+    <p>Acesse o formulário pelo link abaixo ou pelo atalho na tela inicial do celular</p>
+    <a href="https://rovanicamargo.github.io/procedimentos-toracica/" target="_blank">
+      rovanicamargo.github.io/procedimentos-toracica
+    </a>
+  </div>
+
+  <!-- NAVEGADOR -->
+  <div class="section">
+    <div class="section-title">🌐 Qual navegador usar?</div>
+    <div class="step">
+      <div class="step-num">✓</div>
+      <div class="step-text"><strong>iPhone:</strong> use o <strong>Safari</strong> — já vem instalado, funciona perfeitamente</div>
+    </div>
+    <div class="step">
+      <div class="step-num">✓</div>
+      <div class="step-text"><strong>Android:</strong> use o <strong>Google Chrome</strong> — se não tiver, baixe gratuitamente na Play Store</div>
+    </div>
+    <div class="warn">⚠ Evite o Samsung Internet e outros navegadores — podem ter problemas de envio</div>
+  </div>
+
+  <!-- INSTALAR IPHONE -->
+  <div class="section">
+    <div class="section-title">📱 Salvar na tela inicial — iPhone</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">Abra o link no <strong>Safari</strong></div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">Toque no ícone de <strong>compartilhar</strong> — o quadrado com a seta para cima, na barra inferior</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">Role as opções e toque em <strong>"Adicionar à Tela de Início"</strong></div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-text">Confirme o nome e toque em <strong>"Adicionar"</strong></div>
+    </div>
+    <div class="ok">✅ O ícone do CCTO aparecerá na tela inicial como um app</div>
+  </div>
+
+  <!-- INSTALAR ANDROID -->
+  <div class="section">
+    <div class="section-title">📱 Salvar na tela inicial — Android</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">Abra o <strong>Google Chrome</strong> — não use o Samsung Internet</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">Digite o link na barra de endereço do Chrome e acesse</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">Toque nos <strong>três pontinhos</strong> no canto superior direito</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-text">Toque em <strong>"Adicionar à tela inicial"</strong></div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-text">Confirme e toque em <strong>"Adicionar"</strong></div>
+    </div>
+    <div class="ok">✅ O ícone do CCTO aparecerá na tela inicial e sempre abrirá no Chrome</div>
+    <div class="tip">💡 Celular Samsung? É importante seguir esses passos pelo Chrome — o atalho criado pelo Chrome garante que o formulário abra sempre no navegador correto</div>
+  </div>
+
+  <!-- COMO PREENCHER -->
+  <div class="section">
+    <div class="section-title">📝 Como preencher</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">Abra o formulário — a <strong>data de hoje</strong> já vem preenchida automaticamente</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">Preencha todos os campos marcados com <strong>*</strong> — são obrigatórios</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">No campo <strong>Procedimento(s)</strong> você pode selecionar mais de um — use a busca para agilizar</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-text">Toque em <strong>"Salvar procedimento"</strong> — aguarde a confirmação de envio</div>
+    </div>
+    <div class="tip">💡 Sem internet? Sem problema — o registro fica salvo e é enviado automaticamente quando a conexão retornar</div>
+
+    <div style="margin-top:18px;font-size:13px;font-weight:bold;color:#555;margin-bottom:10px">Campos obrigatórios *</div>
+    <div class="fields">
+      <div class="field required">Data</div>
+      <div class="field required">Hospital</div>
+      <div class="field required">Nº Prontuário</div>
+      <div class="field required">Convênio</div>
+      <div class="field required">Cirurgião</div>
+      <div class="field required">Local</div>
+      <div class="field required">Caráter</div>
+      <div class="field required">Lateralidade</div>
+      <div class="field required">Acesso cirúrgico</div>
+      <div class="field required">Procedimento(s)</div>
+    </div>
+  </div>
+
+  <!-- DÚVIDAS -->
+  <div class="section">
+    <div class="section-title">❓ Dúvidas ou problemas?</div>
+    <div class="step">
+      <div class="step-num">→</div>
+      <div class="step-text">Fale diretamente com o <strong>Dr. Rovani</strong></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
