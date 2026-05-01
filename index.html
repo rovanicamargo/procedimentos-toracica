@@ -128,7 +128,7 @@ tbody tr:hover{background:#f0f7fb}
     </div>
 
     <div class="form-grid cols3">
-      <div class="form-group"><label>Nº do prontuário *</label><input type="text" id="f-prontuario" placeholder="ex: 00123456"></div>
+      <div class="form-group"><label>Nº do prontuário *</label><input type="text" id="f-prontuario" placeholder="ex: 00123456"><span style="font-size:10px;color:#aaa;margin-top:3px;white-space:nowrap">📋 Número ao lado do nome do paciente</span></div>
       <div class="form-group"><label>Convênio *</label>
         <select id="f-convenio">
           <option value="">Selecione...</option>
@@ -221,11 +221,6 @@ tbody tr:hover{background:#f0f7fb}
       <div class="sync-status" id="sync-status"></div>
     </div>
 
-    <!-- BOTÃO DE TESTE — remover antes de distribuir -->
-    <div style="margin-top:24px;padding-top:16px;border-top:1px dashed #ddd">
-      <span style="font-size:11px;color:#aaa;display:block;margin-bottom:6px">⚠ Área de testes — remover antes de distribuir</span>
-      <button class="btn" style="font-size:12px;color:#c0392b;border-color:#c0392b;padding:6px 14px" onclick="limparDadosTeste()">🗑 Limpar todos os dados de teste</button>
-    </div>
   </div>
 
   <!-- LISTA -->
@@ -284,20 +279,58 @@ const STORAGE_KEY = 'torax_db_v3';
 let db = [], editingId = null, selectedProcs = [], selectedAcessos = [];
 
 const PROCEDIMENTOS = [
-  'Biópsia pulmonar guiada por TC','Bilobectomia','Bloqueio de nervo intercostal',
-  'Broncoplastia','Broncoscopia','Bulectomia','Costectomia','Criobiópsia',
-  'Descorticação pulmonar','Drenagem torácica','EBUS','Esofagectomia',
-  'Herniorrafia diafragmática','Linfadenectomia mediastinal',
-  'Lobectomia','Mediastinoscopia','Pleurectomia',
-  'Pleurodese','Pleurostomia','Pneumonectomia','Pneumorrafia',
+  'Acesso Venoso Central',
+  'Arterioplastia',
+  'Bilobectomia',
+  'Biópsia pulmonar guiada por TC',
+  'Bloqueio de nervo intercostal',
+  'Broncoplastia',
+  'Broncoscopia flexível',
+  'Broncoscopia rígida',
+  'Bulectomia',
+  'Costectomia',
+  'Criobiópsia',
+  'Descorticação pulmonar',
+  'Dilatação traqueal',
+  'Drenagem com biópsia do pericárdio',
+  'Drenagem torácica',
+  'EBUS',
+  'Esofagectomia',
+  'Esofagoscopia rígida',
+  'Fratura de esterno - Tratamento cirúrgico',
+  'Fraturas costais - Tratamento cirúrgico',
+  'Frenoplicatura',
+  'Herniorrafia diafragmática',
+  'Laserterapia endobrônquica',
+  'Ligadura do ducto torácico',
+  'Linfadenectomia mediastinal',
+  'Lobectomia',
+  'Mediastinoscopia',
+  'Pleurectomia',
+  'Pleurodese',
+  'Pleurostomia',
+  'Pneumonectomia',
+  'Pneumorrafia',
   'Reconstrução da parede torácica',
-  'Remoção de coágulos','Ressecção de mediastino',
-  'Ressecção em cunha (wedge)','Retirada de corpo estranho endobrônquico',
-  'Segmentectomia','Simpatectomia','Timectomia',
-  'Toracocentese','Toracectomia','Toracoplastia',
-  'Toracoscopia diagnóstica (VATS)','Toracotomia exploradora',
-  'Traqueoplastia','Traqueoscopia','Traqueostomia',
-  'Tratamento de mediastinite','Tratamento do desfiladeiro torácico'
+  'Remoção de coágulos',
+  'Ressecção de tumor mediastinal',
+  'Ressecção em cunha (wedge)',
+  'Retirada de corpo estranho endobrônquico',
+  'Retirada de corpo estranho esofágico',
+  'Segmentectomia anatômica',
+  'Simpatectomia',
+  'Timectomia',
+  'Toracocentese',
+  'Toracectomia',
+  'Toracoplastia',
+  'Toracoscopia diagnóstica (VATS)',
+  'Toracotomia exploradora',
+  'Traqueoplastia',
+  'Traqueorrafia',
+  'Traqueoscopia',
+  'Traqueostomia',
+  'Tratamento de mediastinite',
+  'Tratamento do desfiladeiro torácico'
 ].sort((a,b)=>a.localeCompare(b,'pt-BR'));
 
 const ACESSOS = ['Convencional','Endoscópico','RATS','VATS'];
@@ -568,15 +601,6 @@ function exportarCSV(){
   a.href=url;a.download='ProcedimentosTorácica_'+new Date().toISOString().slice(0,10)+'.csv';
   document.body.appendChild(a);a.click();document.body.removeChild(a);
   URL.revokeObjectURL(url);toast('CSV exportado com sucesso');
-}
-
-function limparDadosTeste(){
-  if(!confirm('Apagar TODOS os dados de teste do formulário? Esta ação não pode ser desfeita.'))return;
-  db=[];
-  localStorage.removeItem(STORAGE_KEY);
-  cancelEdit();
-  renderTabela();
-  toast('Dados de teste apagados');
 }
 
 loadDB();
