@@ -272,7 +272,7 @@ tbody tr:hover{background:#f0f7fb}
 // =====================================================
 //  CONFIGURAÇÃO — substitua pela URL do Apps Script
 // =====================================================
-const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz3C3nF8vrBNr07TjozIL46s3rkguvkLm7YWy9kphuXjIHPnHb2Ya8YyUGcXzK0OeoV/exec';
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbygtLEry-Xc7IOB1ZLibq-Do4djsh5Bl0rgbD0StbJ05tHtfgOy4Fy6bVmrDNoU83pb/exec';
 // =====================================================
 
 const STORAGE_KEY = 'torax_db_v3';
@@ -379,7 +379,8 @@ async function enviarParaSheets(reg){
     carater: reg.carater||'',
     lateralidade: reg.lateralidade||'',
     acessos: (reg.acessos||[]).join(' | '),
-    procedimentos: (reg.procedimentos||[]).join(' | ')
+    procedimentos: (reg.procedimentos||[]).join(' | '),
+    procedimentos_tipos: (reg.procedimentos||[]).map(p=>PROCEDIMENTOS.includes(p)?'Oficial':'Manual').join(' | ')
   };
   try{
     await fetch(SHEETS_URL,{method:'POST',body:JSON.stringify(payload)});
