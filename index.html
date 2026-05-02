@@ -375,6 +375,7 @@ async function enviarParaSheets(reg){
     convenio: reg.convenio,
     cirurgiao: reg.cirurgiao,
     local: reg.local,
+    carater: reg.carater||'',
     lateralidade: reg.lateralidade||'',
     acessos: (reg.acessos||[]).join(' | '),
     procedimentos: (reg.procedimentos||[]).join(' | ')
