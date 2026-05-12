@@ -85,6 +85,10 @@ tbody tr:hover{background:#f0f7fb}
   .tab{white-space:nowrap;padding:10px 14px}
 }
 </style>
+        <script>
+      if('serviceWorker' in navigator)
+        navigator.serviceWorker.register('/sw.js');
+        </script>
 </head>
 <body>
 <div class="app">
@@ -171,6 +175,7 @@ tbody tr:hover{background:#f0f7fb}
           <option>Pronto-socorro</option>
           <option>Sala de procedimentos</option>
           <option>Setor de endoscopia</option>
+          <option>Setor de Imagem</option>
           <option>UTI</option>
           <option>Outro</option>
         </select>
